@@ -18,7 +18,7 @@ public interface TaskDeleteRepository extends Repository<Task, Long> {
      * @param id the ID of the task to find.
      * @return the task ID if found.
      */
-    @Query(value = "SELECT u.taskid FROM manage_task u WHERE u.taskid = :id", nativeQuery = true)
+    @Query(value = "SELECT u.taskid FROM task u WHERE u.taskid = :id", nativeQuery = true)
     Long findTaskId(Long id);
 
     /**
@@ -28,7 +28,7 @@ public interface TaskDeleteRepository extends Repository<Task, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM manage_task_comments t WHERE t.manage_task_taskid = :taskID", nativeQuery = true)
+    @Query(value = "DELETE FROM task_comments t WHERE t.task_taskid = :taskID", nativeQuery = true)
     void deleteCommentsByTaskId(Long taskID);
 
     /**
@@ -38,6 +38,6 @@ public interface TaskDeleteRepository extends Repository<Task, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM manage_task t WHERE t.taskid = :taskID", nativeQuery = true)
+    @Query(value = "DELETE FROM task t WHERE t.taskid = :taskID", nativeQuery = true)
     void deleteTaskById(Long taskID);
 }

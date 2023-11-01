@@ -84,7 +84,7 @@ public class MainController {
      * @param taskID - ID of the task to be deleted
      * @return "success" if the task was deleted, "failure" otherwise
      */
-    @PostMapping(path = "/del")
+    @DeleteMapping(path = "/del")
     public @ResponseBody String deleteTask(@RequestParam Long taskID) {
         if (taskID.equals(mainService.findtaskID(taskID))) {
             mainService.deleteCommentById(taskID);
