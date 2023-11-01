@@ -1,7 +1,4 @@
 package com.example.TrelloClone.Helpers;
-import com.sun.istack.NotNull;
-import org.springframework.lang.NonNull;
-
 import javax.persistence.*;
 
 //The user class is a table in the database. It has fields which stores information about the user, including the user's name, email and suID.

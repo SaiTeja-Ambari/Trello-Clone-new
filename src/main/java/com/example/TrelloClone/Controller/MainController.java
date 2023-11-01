@@ -9,15 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.time.LocalTime;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 
 @Controller
 @RequestMapping(path = "/demo")
 @CrossOrigin
 public class MainController {
 
-    @Autowired
+    
+	@Autowired
     private MainService mainService;
 
     @Autowired
@@ -36,13 +41,12 @@ public class MainController {
     public @ResponseBody Long createTask(@RequestParam(required = false) Long suid, String desc, @RequestParam(required = false) List<String> comment) {
         Task task = new Task();
         History historyEntry = new History();
-
+        
         if (suid != null) {
             String name = mainService.findByName(suid);
             if (name == null) {
                 return -1L;
             }
-
             task.setSuid(suid);
             task.setName(name);
             
@@ -84,7 +88,7 @@ public class MainController {
      * @param taskID - ID of the task to be deleted
      * @return "success" if the task was deleted, "failure" otherwise
      */
-    @DeleteMapping(path = "/del")
+    @DeleteMapping(path = "/delete")
     public @ResponseBody String deleteTask(@RequestParam Long taskID) {
         if (taskID.equals(mainService.findtaskID(taskID))) {
             mainService.deleteCommentById(taskID);
@@ -104,12 +108,76 @@ public class MainController {
      * @param comment - Comment to be added
      * @return "success" if the task was modified, error message otherwise
      */
+
+    //Modifies existing task. Can add or change the user assigned, can change state of task, can add comments.
+    //If state of task has been changed to done, total time taken for the task to move from to-do to done is calculated(in minutes) and shown.
     @PostMapping(path = "/modify")
     public @ResponseBody String modifyTask(@RequestParam Long id, @RequestParam(required = false) String state, @RequestParam Long suid, @RequestParam(required = false, defaultValue = "") String desc, @RequestParam(required = false, defaultValue = "") String comment) {
-        // Logic for updating the task based on provided parameters
-        // ... [Skipped for brevity]
-        
-        historyRepository.save(new History());  // Saving a new history entry
+
+        History h =new History();
+        h.setTaskID(id);
+
+        if (state != null) {
+
+            int state_num=mainService.getCurrentState(id);
+            if (State.valueOf(state) != State.TODO && state_num == State.TODO.getNumVal()) {
+
+                LocalTime timestamp = mainService.fetchTime(id);
+                Long timeToComplete = timestamp.until(LocalTime.now(), MINUTES);
+                Long prevtimeInTodo = mainService.fetchTimeInTodo(id);
+                Long finaltime;
+                if(prevtimeInTodo!=null) { finaltime = prevtimeInTodo + timeToComplete;}
+                else finaltime=timeToComplete;
+                mainService.timeInTodo(id, finaltime);
+                h.setTimeInTodo(finaltime);
+                mainService.updateTimestamp(id, Time.valueOf(LocalTime.now()));
+
+            }
+            if (State.valueOf(state) != State.DOING && state_num == State.DOING.getNumVal()) {
+
+                LocalTime timestamp = mainService.fetchTime(id);
+                Long timeToComplete = timestamp.until(LocalTime.now(), MINUTES);
+                Long prevtimeInDoing = mainService.fetchTimeInDoing(id);
+                Long finaltime;
+                if(prevtimeInDoing!=null) { finaltime = prevtimeInDoing + timeToComplete;}
+                else finaltime =timeToComplete;
+
+                mainService.timeInDoing(id, finaltime);
+                h.setTimeInTodo(finaltime);
+                mainService.updateTimestamp(id, Time.valueOf(LocalTime.now()));
+            }
+            if (State.valueOf(state) != State.DONE && state_num == State.DONE.getNumVal()) {
+                LocalTime timestamp = mainService.fetchTime(id);
+                Long timeToComplete = timestamp.until(LocalTime.now(), MINUTES);
+                Long prevtimeInDone = mainService.fetchTimeInDone(id);
+                Long finaltime;
+                if(prevtimeInDone!=null) { finaltime = prevtimeInDone + timeToComplete;}
+                else finaltime=timeToComplete;
+                mainService.timeInDone(id, finaltime);
+                h.setTimeInTodo(finaltime);
+                mainService.updateTimestamp(id, Time.valueOf(LocalTime.now()));
+            }
+            h.setState(State.valueOf(state));
+            mainService.changestate(id, State.valueOf(state).getNumVal());
+        }
+        if (suid != null) {
+            mainService.changeusername(id, suid);
+            h.setSuid(suid);
+            String name = mainService.findByName(suid);
+            if (name != null) {
+                h.setName(name);
+                mainService.changename(id, name);
+            } else return "enter a valid suid";
+        }
+        if (desc != null) {
+            mainService.changedesc(id, desc);
+            h.setDescription(desc);
+        }
+
+        if (comment != null) {
+            mainService.addComment(id, comment);
+        }
+        historyRepository.save(h);
         return "success";
     }
 
