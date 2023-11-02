@@ -119,8 +119,8 @@ public class MainController {
 
         if (state != null) {
 
-            int state_num=mainService.getCurrentState(id);
-            if (State.valueOf(state) != State.TODO && state_num == State.TODO.getNumVal()) {
+            State state_num=mainService.getCurrentState(id);
+            if (State.valueOf(state) != State.TODO && state_num.TODO.getNumVal() == State.TODO.getNumVal()) {
 
                 LocalTime timestamp = mainService.fetchTime(id);
                 Long timeToComplete = timestamp.until(LocalTime.now(), MINUTES);
@@ -133,7 +133,7 @@ public class MainController {
                 mainService.updateTimestamp(id, Time.valueOf(LocalTime.now()));
 
             }
-            if (State.valueOf(state) != State.DOING && state_num == State.DOING.getNumVal()) {
+            if (State.valueOf(state) != State.DOING && state_num.DOING.getNumVal() == State.DOING.getNumVal()) {
 
                 LocalTime timestamp = mainService.fetchTime(id);
                 Long timeToComplete = timestamp.until(LocalTime.now(), MINUTES);
@@ -146,7 +146,7 @@ public class MainController {
                 h.setTimeInTodo(finaltime);
                 mainService.updateTimestamp(id, Time.valueOf(LocalTime.now()));
             }
-            if (State.valueOf(state) != State.DONE && state_num == State.DONE.getNumVal()) {
+            if (State.valueOf(state) != State.DONE && state_num.DONE.getNumVal() == State.DONE.getNumVal()) {
                 LocalTime timestamp = mainService.fetchTime(id);
                 Long timeToComplete = timestamp.until(LocalTime.now(), MINUTES);
                 Long prevtimeInDone = mainService.fetchTimeInDone(id);

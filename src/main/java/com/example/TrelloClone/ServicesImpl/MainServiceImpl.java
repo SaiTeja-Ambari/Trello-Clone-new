@@ -1,5 +1,6 @@
 package com.example.TrelloClone.ServicesImpl;
 
+import com.example.TrelloClone.Helpers.State;
 import com.example.TrelloClone.Helpers.Task;
 import com.example.TrelloClone.Repo.TaskDeleteRepository;
 import com.example.TrelloClone.Repo.ModifyRepository;
@@ -118,7 +119,7 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
-    public int getCurrentState(Long taskid) {
+    public State getCurrentState(Long taskid) {
         return modifyRepository.fetchCurrentState(taskid);
     }
 

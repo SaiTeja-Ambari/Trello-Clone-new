@@ -1,6 +1,7 @@
 package com.example.TrelloClone.Services;
 
 import com.example.TrelloClone.Helpers.Task;
+import com.example.TrelloClone.Helpers.State;
 
 import java.sql.Time;
 import java.time.LocalTime;
@@ -24,7 +25,7 @@ public interface MainService {
     void changestate(Long id, int state);
     void changeusername(Long id, Long newsuid);
     void changename(Long id, String name);
-    int getCurrentState(Long taskid);
+    State getCurrentState(Long taskid);
     void changedesc(Long id, String desc);
     void addComment(Long id, String comment);
 }

@@ -6,6 +6,7 @@ import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.TrelloClone.Helpers.State;
 import com.example.TrelloClone.Helpers.Task;
 
 import java.sql.Time;
@@ -54,7 +55,7 @@ public interface ModifyRepository extends Repository<Task, Long> {
     void updateTimeInDone(Long id, Long time);
 
     @Query(value = "SELECT state FROM task WHERE taskid=:id", nativeQuery = true)
-    int fetchCurrentState(Long id);
+    State fetchCurrentState(Long id);
 
     @Modifying
     @Transactional
