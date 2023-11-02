@@ -112,7 +112,7 @@ public class MainController {
     //Modifies existing task. Can add or change the user assigned, can change state of task, can add comments.
     //If state of task has been changed to done, total time taken for the task to move from to-do to done is calculated(in minutes) and shown.
     @PostMapping(path = "/modify")
-    public @ResponseBody String modifyTask(@RequestParam Long id, @RequestParam(required = false) String state, @RequestParam Long suid, @RequestParam(required = false, defaultValue = "") String desc, @RequestParam(required = false, defaultValue = "") String comment) {
+    public @ResponseBody String modifyTask(@RequestParam Long id, @RequestParam(required = false) State state, @RequestParam Long suid, @RequestParam(required = false, defaultValue = "") String desc, @RequestParam(required = false, defaultValue = "") String comment) {
 
         History h =new History();
         h.setTaskID(id);
@@ -120,7 +120,7 @@ public class MainController {
         if (state != null) {
 
             State state_num=mainService.getCurrentState(id);
-            if (State.valueOf(state) != State.TODO && state_num.TODO.getNumVal() == State.TODO.getNumVal()) {
+            if (state != State.TODO && state_num.TODO.getNumVal() == State.TODO.getNumVal()) {
 
                 LocalTime timestamp = mainService.fetchTime(id);
                 Long timeToComplete = timestamp.until(LocalTime.now(), MINUTES);
@@ -133,7 +133,7 @@ public class MainController {
                 mainService.updateTimestamp(id, Time.valueOf(LocalTime.now()));
 
             }
-            if (State.valueOf(state) != State.DOING && state_num.DOING.getNumVal() == State.DOING.getNumVal()) {
+            if (state != State.DOING && state_num.DOING.getNumVal() == State.DOING.getNumVal()) {
 
                 LocalTime timestamp = mainService.fetchTime(id);
                 Long timeToComplete = timestamp.until(LocalTime.now(), MINUTES);
@@ -146,7 +146,7 @@ public class MainController {
                 h.setTimeInTodo(finaltime);
                 mainService.updateTimestamp(id, Time.valueOf(LocalTime.now()));
             }
-            if (State.valueOf(state) != State.DONE && state_num.DONE.getNumVal() == State.DONE.getNumVal()) {
+            if (state != State.DONE && state_num.DONE.getNumVal() == State.DONE.getNumVal()) {
                 LocalTime timestamp = mainService.fetchTime(id);
                 Long timeToComplete = timestamp.until(LocalTime.now(), MINUTES);
                 Long prevtimeInDone = mainService.fetchTimeInDone(id);
@@ -157,8 +157,8 @@ public class MainController {
                 h.setTimeInTodo(finaltime);
                 mainService.updateTimestamp(id, Time.valueOf(LocalTime.now()));
             }
-            h.setState(State.valueOf(state));
-            mainService.changestate(id, State.valueOf(state).getNumVal());
+            h.setState(state);
+            mainService.changestate(id, state.name());
         }
         if (suid != null) {
             mainService.changeusername(id, suid);

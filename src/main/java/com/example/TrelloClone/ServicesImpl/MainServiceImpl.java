@@ -104,7 +104,7 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
-    public void changestate(Long id, int state) {
+    public void changestate(Long id, String state) {
         modifyRepository.updateTaskState(id, state);
     }
 

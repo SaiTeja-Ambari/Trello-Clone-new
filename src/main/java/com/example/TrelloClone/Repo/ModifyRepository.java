@@ -60,7 +60,7 @@ public interface ModifyRepository extends Repository<Task, Long> {
     @Modifying
     @Transactional
     @Query(value = "UPDATE task SET state=:state WHERE taskid=:id", nativeQuery = true)
-    void updateTaskState(Long id, int state);
+    void updateTaskState(Long id, String state);
 
     @Modifying
     @Transactional

@@ -22,7 +22,7 @@ public interface MainService {
     void timeInTodo(Long id, Long time);
     void timeInDoing(Long id, Long time);
     void timeInDone(Long id, Long time);
-    void changestate(Long id, int state);
+    void changestate(Long id, String string);
     void changeusername(Long id, Long newsuid);
     void changename(Long id, String name);
     State getCurrentState(Long taskid);
