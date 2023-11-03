@@ -29,7 +29,6 @@ public class Task {
 
     private Long timeInDone;
 
-    private Long completionTime;
 
     @ElementCollection(targetClass = String.class)
     private List<String> comments = new ArrayList<>();
@@ -116,13 +115,7 @@ public class Task {
         this.timeInDone = timeInDone;
     }
 
-    public Long getCompletionTime() {
-        return completionTime;
-    }
 
-    public void setCompletionTime(Long completionTime) {
-        this.completionTime = completionTime;
-    }
 
     public List<String> getComments() {
         return comments;

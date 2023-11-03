@@ -84,11 +84,6 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
-    public void addCompletionTime(Long id, Long time) {
-        modifyRepository.updateCompletionTime(id, time);
-    }
-
-    @Override
     public void timeInTodo(Long id, Long time) {
         modifyRepository.updateTimeInTodo(id, time);
     }

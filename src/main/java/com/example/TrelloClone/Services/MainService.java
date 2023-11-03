@@ -18,7 +18,6 @@ public interface MainService {
     Long fetchTimeInDoing(Long id);
     Long fetchTimeInDone(Long id);
     void updateTimestamp(Long id, Time time);
-    void addCompletionTime(Long id, Long time);
     void timeInTodo(Long id, Long time);
     void timeInDoing(Long id, Long time);
     void timeInDone(Long id, Long time);

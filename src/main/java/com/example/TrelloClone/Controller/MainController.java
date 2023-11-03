@@ -37,7 +37,7 @@ public class MainController {
 	 * @param comment - Optional comments
 	 * @return task ID or -1 in case of an error
 	 */
-	@PostMapping(path = "/add")
+	@PostMapping(path = "/task/add")
 	public @ResponseBody Long createTask(@RequestParam(required = false) Long suid, String desc, @RequestParam(required = false) List<String> comment) {
 		Task task = new Task();
 		History historyEntry = new History();
@@ -77,7 +77,7 @@ public class MainController {
 	 * 
 	 * @return list of all tasks
 	 */
-	@GetMapping(path = "/all")
+	@GetMapping(path = "/task/all")
 	public @ResponseBody Iterable<Task> getAllTasks() {
 		return mainService.findAll();
 	}
@@ -88,7 +88,7 @@ public class MainController {
 	 * @param taskID - ID of the task to be deleted
 	 * @return "success" if the task was deleted, "failure" otherwise
 	 */
-	@DeleteMapping(path = "/delete")
+	@DeleteMapping(path = "/task/delete")
 	public @ResponseBody String deleteTask(@RequestParam Long taskID) {
 		if (taskID.equals(mainService.findtaskID(taskID))) {
 			mainService.deleteCommentById(taskID);
@@ -111,7 +111,7 @@ public class MainController {
 
 	//Modifies existing task. Can add or change the user assigned, can change state of task, can add comments.
 	//If state of task has been changed to done, total time taken for the task to move from to-do to done is calculated(in minutes) and shown.
-	@PostMapping(path = "/modify")
+	@PostMapping(path = "/task/modify")
 	public @ResponseBody String modifyTask(@RequestParam Long id, @RequestParam(required = false) State state, @RequestParam Long suid, @RequestParam(required = false, defaultValue = "") String desc, @RequestParam(required = false, defaultValue = "") String comment) {
 
 		History h =new History();
@@ -180,6 +180,7 @@ public class MainController {
 				mainService.updateTimestamp(id, Time.valueOf(LocalTime.now()));
 			h.setState(state);
 			mainService.changestate(id, state.name());
+			
 		}
 		if (suid != null) {
 			mainService.changeusername(id, suid);

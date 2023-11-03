@@ -36,11 +36,6 @@ public interface ModifyRepository extends Repository<Task, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE task SET completion_time=:time WHERE taskid=:id", nativeQuery = true)
-    void updateCompletionTime(Long id, Long time);
-
-    @Modifying
-    @Transactional
     @Query(value = "UPDATE task SET time_in_todo=:time WHERE taskid=:id", nativeQuery = true)
     void updateTimeInTodo(Long id, Long time);
 
